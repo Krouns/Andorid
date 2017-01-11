@@ -9,31 +9,31 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.Iterator;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class DataActivity extends AppCompatActivity {
 
+    final TextView textView = (TextView) findViewById(R.id.textView3) ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data);
-        Intent i = getIntent();
-        final int valueOfUser = i.getIntExtra("userValue",0);
 
-        Log.d("Share Value","Value  "+valueOfUser);
-
-
-     //   final TextView textView = (android.widget.TextView) findViewById(R.id.textView2) ;
-
-       // textView.setText("asdsadsa" +valueOfUser);
 
         Button btnApiCall = (Button) findViewById(R.id.button4);
 
@@ -46,6 +46,9 @@ public class DataActivity extends AppCompatActivity {
                     SendPostRequest a = new SendPostRequest();
 
                     String valueAPI =   a.execute().get();
+                    textView.setText(valueAPI);
+
+
 
 
                 } catch (Exception ex) {
@@ -59,7 +62,7 @@ public class DataActivity extends AppCompatActivity {
 
     }
 
-    public class SendPostRequest extends AsyncTask<String, Void, String> {
+    public class SendPostRequest extends AsyncTask<String, Void, String>   {
 
 
 
@@ -70,6 +73,13 @@ public class DataActivity extends AppCompatActivity {
         protected String doInBackground(String... arg0) {
 
             try {
+                Intent i = getIntent();
+                final int valueOfUser = i.getIntExtra("userValue",0);
+
+                Log.d("Share Value","Value  "+valueOfUser);
+
+                JSONObject postDataParams = new JSONObject();
+                postDataParams.put("column", valueOfUser);
 
                 URL url = new URL("http://httpbin.org/get?param1=hello");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -79,8 +89,14 @@ public class DataActivity extends AppCompatActivity {
                 conn.setDoInput(true);
                 conn.setDoOutput(true);
 
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(getPostDataString(postDataParams));
 
-
+                writer.flush();
+                writer.close();
+                os.close();
 
 
                 int responseCode = conn.getResponseCode();
@@ -113,9 +129,11 @@ public class DataActivity extends AppCompatActivity {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            }catch (Exception e){
+                e.printStackTrace();
             }
 
-            return "asdf";
+            return "What";
 
         }
 
@@ -125,4 +143,30 @@ public class DataActivity extends AppCompatActivity {
         }
 
     }
+
+    public String getPostDataString(JSONObject params) throws Exception {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+
+        Iterator<String> itr = params.keys();
+
+        while(itr.hasNext()){
+
+            String key= itr.next();
+            Object value = params.get(key);
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(key, "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(value.toString(), "UTF-8"));
+
+        }
+        return result.toString();
+    }
+
 }
