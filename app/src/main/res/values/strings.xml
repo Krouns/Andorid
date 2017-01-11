@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Filling</string>
+
+
+    <string name="whatsNewTitle">Welcome To Food Manager</string>
+    <string name="whatsNewText">Hungry :P</string>
+    <string name="ok">HellYeah!</string>
+
+
+</resources>
