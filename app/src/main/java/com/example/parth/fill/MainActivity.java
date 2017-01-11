@@ -35,7 +35,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 
 public class MainActivity extends Activity {
-    SendPostRequest a = new SendPostRequest();
+
 
 
     @Override
@@ -53,9 +53,20 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 try {
 
+                    SendPostRequest a = new SendPostRequest();
                     // CALL
+                    textView.setVisibility(View.VISIBLE);
                   String valueAPI =   a.execute().get();
                     textView.setText(valueAPI);
+                    textView.postDelayed(new Runnable() {
+                        public void run() {
+                            textView.setVisibility(View.INVISIBLE);
+                        }
+                    }, 3000);
+                    a.cancel(true);
+
+
+
 
 
 
