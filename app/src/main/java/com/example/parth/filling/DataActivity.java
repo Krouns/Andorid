@@ -28,7 +28,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class DataActivity extends AppCompatActivity {
 
-    final TextView textView = (TextView) findViewById(R.id.textView3) ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +36,7 @@ public class DataActivity extends AppCompatActivity {
 
 
         Button btnApiCall = (Button) findViewById(R.id.button4);
+        final TextView textView = (TextView) findViewById(R.id.textView3) ;
 
         btnApiCall.setOnClickListener(new Button.OnClickListener() {
 
