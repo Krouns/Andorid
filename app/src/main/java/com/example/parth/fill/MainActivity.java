@@ -1,24 +1,23 @@
 package com.example.parth.fill;
 
-import android.app.DownloadManager;
-import android.nfc.Tag;
+
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+
 import java.io.IOException;
-import java.io.InputStream;
+
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.logging.Logger;
+
 
 
 import android.app.Activity;
@@ -28,8 +27,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -53,6 +50,18 @@ public class MainActivity extends Activity {
             public void onClick(View v) {
                 try {
 
+                    SharedPreferences settings = getApplicationContext().getSharedPreferences("mySettings",0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putInt("homeScore", 1);
+
+// Apply the edits!
+                    editor.apply();
+
+// Get from the SharedPreferences
+                    SharedPreferences settingss = getApplicationContext().getSharedPreferences("mySettings", 0);
+                    int homeScore = settingss.getInt("homeScore",0);
+                    Log.d("Stored value","This is the value "+homeScore);
+
                     SendPostRequest a = new SendPostRequest();
                     // CALL
                     textView.setVisibility(View.VISIBLE);
@@ -64,10 +73,6 @@ public class MainActivity extends Activity {
                         }
                     }, 3000);
                     a.cancel(true);
-
-
-
-
 
 
                 } catch (Exception ex) {
@@ -91,11 +96,6 @@ public class MainActivity extends Activity {
             try {
 
                 URL url = new URL("http://httpbin.org/get?param1=hello");
-
-                //  JSONObject postDataParams = new JSONObject();
-                // postDataParams.put("name", "abc");
-                //postDataParams.put("email", "abc@gmail.com");
-                //Log.e("params",postDataParams.toString());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(15000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);
