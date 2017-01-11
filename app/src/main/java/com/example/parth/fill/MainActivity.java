@@ -1,6 +1,7 @@
 package com.example.parth.fill;
 
 import android.app.DownloadManager;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.logging.Logger;
 
 
 import android.app.Activity;
@@ -78,8 +80,7 @@ public class MainActivity extends Activity {
                 conn.setReadTimeout(15000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);
                 conn.setRequestMethod("GET");
-                conn.setDoInput(true);
-                conn.setDoOutput(true);
+
 
 
                 int responseCode = conn.getResponseCode();
@@ -95,11 +96,11 @@ public class MainActivity extends Activity {
                     while ((line = in.readLine()) != null) {
 
                         sb.append(line);
-                        break;
+
                     }
 
                     in.close();
-                    System.out.print(sb.toString());
+                    Log.i("as",sb.toString());
                     return sb.toString();
 
                 } else {
