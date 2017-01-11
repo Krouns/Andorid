@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -36,10 +37,12 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivity extends Activity {
     SendPostRequest a = new SendPostRequest();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final TextView textView = (TextView) findViewById(R.id.textView) ;
 
 
         Button callTheAPI = (Button) findViewById(R.id.button);
@@ -51,7 +54,10 @@ public class MainActivity extends Activity {
                 try {
 
                     // CALL
-                    a.execute();
+                  String valueAPI =   a.execute().get();
+                    textView.setText(valueAPI);
+
+
 
                 } catch (Exception ex) {
                     // content.setText(" url exeption! " );
@@ -63,7 +69,10 @@ public class MainActivity extends Activity {
 
     public class SendPostRequest extends AsyncTask<String, Void, String> {
 
+
+
         protected void onPreExecute() {
+
         }
 
         protected String doInBackground(String... arg0) {
